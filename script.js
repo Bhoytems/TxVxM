@@ -1,0 +1,70 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Social media links
+    const socialLinks = {
+        instagram: "https://instagram.com",
+        tiktok: "https://tiktok.com",
+        twitter: "https://x.com"
+    };
+    
+    // Add click events to buttons
+    document.getElementById('instagram').addEventListener('click', function() {
+        window.open(socialLinks.instagram, '_blank');
+    });
+    
+    document.getElementById('tiktok').addEventListener('click', function() {
+        window.open(socialLinks.tiktok, '_blank');
+    });
+    
+    document.getElementById('twitter').addEventListener('click', function() {
+        window.open(socialLinks.twitter, '_blank');
+    });
+    
+    // Create floating particles
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random properties
+        const size = Math.random() * 10 + 5;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 10 + 10;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.background = `rgba(255, 215, 0, ${Math.random() * 0.5 + 0.1})`;
+        particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+        particle.style.borderRadius = '50%';
+        particle.style.position = 'absolute';
+        
+        particlesContainer.appendChild(particle);
+    }
+    
+    // Logo hover effect
+    const logo = document.getElementById('logo');
+    logo.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.05) rotate(5deg)';
+    });
+    
+    logo.addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1) rotate(0deg)';
+    });
+    
+    // Button hover effects
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+})
