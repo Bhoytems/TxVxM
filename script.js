@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('twitter').addEventListener('click', function() {
         window.open(socialLinks.twitter, '_blank');
     });
+ document.getElementById('support').addEventListener('click', function() {
+        window.open(socialLinks.support, '_blank');
+    });
     
     // Create floating particles
     const particlesContainer = document.getElementById('particles');
