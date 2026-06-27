@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makyton — Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08070b;
+    --surface:#15101d;
+    --surface-2:#1c1527;
+    --purple-deep:#2c1547;
+    --purple:#4a2384;
+    --purple-bright:#7c3aed;
+    --text:#f4f1f8;
+    --text-muted:#948da3;
+    --border:#241a32;
+    --gold:#e3b341;
+    --red:#f06868;
+    --green:#5fd28f;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+  }
+
+  /* ---------- Login screen ---------- */
+  #loginScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .login-card{
+    width:100%;
+    max-width:360px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:32px 26px;
+    text-align:center;
+  }
+  .wordmark{
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:22px;
+    letter-spacing:0.5px;
+    margin-bottom:4px;
+  }
+  .wordmark span{ color:var(--purple-bright); }
+  .login-sub{
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin-bottom:24px;
+  }
+  .login-input{
+    width:100%;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:13px 14px;
+    color:var(--text);
+    font-size:14px;
+    font-family:'Inter', sans-serif;
+    margin-bottom:10px;
+  }
+  .login-btn{
+    width:100%;
+    background:var(--purple-bright);
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:13px;
+    font-size:14px;
+    font-weight:700;
+    font-family:'Inter', sans-serif;
+    cursor:pointer;
+    margin-top:6px;
+  }
+  .login-error{
+    font-size:12px;
+    color:var(--red);
+    min-height:16px;
+    margin-top:10px;
+  }
+
+  /* ---------- Dashboard ---------- */
+  #dashboard{ display:none; }
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px 28px;
+    border-bottom:1px solid var(--border);
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .admin-tag{
+    font-size:11px;
+    color:var(--text-muted);
+    background:var(--surface-2);
+    padding:4px 10px;
+    border-radius:20px;
+    margin-left:8px;
+    vertical-align:middle;
+  }
+  .logout-btn{
+    background:var(--surface-2);
+    color:var(--text-muted);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:9px 16px;
+    font-size:12.5px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+
+  .container{ max-width:1080px; margin:0 auto; padding:24px 28px 60px; }
+
+  .stats-row{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+    gap:14px;
+    margin-bottom:26px;
+  }
+  .stat-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:18px;
+  }
+  .stat-value{
+    font-family:'Sora', sans-serif;
+    font-size:24px;
+    font-weight:800;
+  }
+  .stat-label{
+    font-size:12px;
+    color:var(--text-muted);
+    margin-top:4px;
+  }
+
+  .toolbar{
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .search-input{
+    flex:1;
+    min-width:220px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px 14px;
+    color:var(--text);
+    font-size:13.5px;
+    font-family:'Inter', sans-serif;
+  }
+  .search-input::placeholder{ color:var(--text-muted); }
+
+  .table-wrap{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    overflow-x:auto;
+  }
+  table{ width:100%; border-collapse:collapse; min-width:760px; }
+  thead th{
+    text-align:left;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    color:var(--text-muted);
+    padding:14px 16px;
+    border-bottom:1px solid var(--border);
+    font-weight:600;
+  }
+  tbody td{
+    padding:13px 16px;
+    border-bottom:1px solid var(--border);
+    font-size:13.5px;
+    vertical-align:middle;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody tr.flash{ background:rgba(124,58,237,0.12); transition:background 1.2s ease; }
+
+  .user-cell{ display:flex; flex-direction:column; }
+  .user-name{ font-weight:600; }
+  .user-id{ font-size:11.5px; color:var(--text-muted); }
+
+  .badge{
+    font-size:11px;
+    font-weight:600;
+    padding:3px 9px;
+    border-radius:20px;
+    display:inline-block;
+  }
+  .badge.verified{ background:rgba(95,210,143,0.15); color:var(--green); }
+  .badge.unverified{ background:rgba(148,141,163,0.15); color:var(--text-muted); }
+
+  .balance-cell{ font-weight:700; color:var(--gold); white-space:nowrap; }
+
+  .action-cell{ display:flex; align-items:center; gap:6px; }
+  .amount-input{
+    width:70px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:7px 8px;
+    color:var(--text);
+    font-size:12.5px;
+    font-family:'Inter', sans-serif;
+  }
+  .action-btn{
+    border:none;
+    border-radius:8px;
+    padding:7px 10px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+  .action-btn.add{ background:rgba(95,210,143,0.15); color:var(--green); }
+  .action-btn.deduct{ background:rgba(240,104,104,0.15); color:var(--red); }
+
+  .empty-state{
+    text-align:center;
+    padding:40px 20px;
+    color:var(--text-muted);
+    font-size:13px;
+  }
+
+  .disclaimer{
+    margin-top:22px;
+    font-size:11.5px;
+    color:var(--text-muted);
+    line-height:1.6;
+    border-top:1px solid var(--border);
+    padding-top:16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="wordmark">MAKY<span>TON</span></div>
+    <div class="login-sub">Admin Panel</div>
+    <input class="login-input" type="password" id="passwordInput" placeholder="Enter admin password" autocomplete="off">
+    <button class="login-btn" onclick="tryLogin()">Log In</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <div class="topbar">
+    <div>
+      <span class="wordmark" style="font-size:18px;">MAKY<span>TON</span></span>
+      <span class="admin-tag">Admin Panel</span>
+    </div>
+    <button class="logout-btn" onclick="logout()">Log Out</button>
+  </div>
+
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="statTotalUsers">0</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statTotalMyt">0</div>
+        <div class="stat-label">$MYT Distributed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="statVerified">0</div>
+        <div class="stat-label">Verified Makytians</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input class="search-input" id="searchInput" type="text" placeholder="Search by username or Telegram ID…" oninput="renderTable()">
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Wallet</th>
+            <th>Verified</th>
+            <th>Referrals</th>
+            <th>$MYT Balance</th>
+            <th>Adjust Balance</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody"></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none;">No users match your search.</div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-title">Tasks</div>
+      <div class="form-row">
+        <select class="form-input" id="taskType" style="max-width:160px;">
+          <option value="visit_website">Visit Website</option>
+          <option value="bot_link">Start Another Bot</option>
+        </select>
+        <input class="form-input" id="taskTitle" placeholder="Task title">
+        <input class="form-input" id="taskLink" placeholder="Link (https://...)">
+        <input class="form-input" id="taskReward" type="number" placeholder="Reward $MYT" style="max-width:130px;">
+        <button class="form-btn" onclick="createTask()">Add Task</button>
+      </div>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table>
+          <thead><tr><th>Type</th><th>Title</th><th>Link</th><th>Reward</th><th>Status</th><th></th></tr></thead>
+          <tbody id="taskTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-title">Redeem Codes</div>
+      <div class="form-row">
+        <input class="form-input" id="codeValue" placeholder="CODE (e.g. MAKYTON)" style="text-transform:uppercase;">
+        <input class="form-input" id="codeReward" type="number" placeholder="Reward $MYT" style="max-width:130px;">
+        <input class="form-input" id="codeMaxUses" type="number" placeholder="Max uses (blank = unlimited)" style="max-width:200px;">
+        <button class="form-btn" onclick="createRedeemCode()">Add Code</button>
+      </div>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table>
+          <thead><tr><th>Code</th><th>Reward</th><th>Uses</th></tr></thead>
+          <tbody id="codeTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      This panel is wired to the real Makyton backend — user data, balances, tasks, and redeem codes are
+      all live in Postgres. Login is verified server-side via a JWT session cookie, and balance changes
+      write directly to the database. Keep this page's URL private since anyone with the admin password
+      can adjust balances.
+    </div>
+  </div>
+</div>
+
+<style>
+  .section-block{ margin-top:30px; }
+  .section-block-title{ font-family:'Sora', sans-serif; font-size:16px; font-weight:700; margin-bottom:12px; }
+  .form-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .form-input{
+    flex:1; min-width:140px;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:11px 12px; color:var(--text); font-size:13px; font-family:'Inter', sans-serif;
+  }
+  .form-btn{
+    background:var(--purple-bright); color:#fff; border:none; border-radius:10px;
+    padding:11px 18px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter', sans-serif;
+  }
+  .small-btn{
+    background:rgba(240,104,104,0.15); color:var(--red); border:none; border-radius:8px;
+    padding:6px 10px; font-size:11.5px; font-weight:700; cursor:pointer;
+  }
+</style>
+
+<script>
+  async function adminApi(path, options = {}){
+    const res = await fetch('/api/admin' + path, {
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      ...options,
+    });
+    return res;
+  }
+
+  async function tryLogin(){
+    const input = document.getElementById('passwordInput').value;
+    const errorEl = document.getElementById('loginError');
+    const res = await fetch('/api/auth/admin-login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: input }),
+    });
+    if (res.ok){
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadAll();
+    } else {
+      errorEl.textContent = 'Incorrect password.';
+    }
+  }
+  document.getElementById('passwordInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') tryLogin();
+  });
+
+  async function logout(){
+    await fetch('/api/auth/admin-logout', { method: 'POST', credentials: 'include' });
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('passwordInput').value = '';
+    document.getElementById('loginError').textContent = '';
+  }
+
+  function formatNumber(n){ return n.toLocaleString('en-US'); }
+  function shortWallet(w){ return w ? w.slice(0,6) + '...' + w.slice(-4) : '—'; }
+
+  // ---------- Users ----------
+  let users = [];
+
+  async function renderTable(){
+    const query = document.getElementById('searchInput').value.trim();
+    const res = await adminApi('/users' + (query ? `?q=${encodeURIComponent(query)}` : ''));
+    users = await res.json();
+
+    document.getElementById('statTotalUsers').textContent = formatNumber(users.length);
+    document.getElementById('statTotalMyt').textContent = formatNumber(users.reduce((sum, u) => sum + u.balance, 0));
+    document.getElementById('statVerified').textContent = formatNumber(users.filter(u => u.wallet_address).length);
+
+    const tbody = document.getElementById('userTableBody');
+    const emptyState = document.getElementById('emptyState');
+    emptyState.style.display = users.length === 0 ? 'block' : 'none';
+
+    tbody.innerHTML = users.map((u) => `
+      <tr id="row-${u.telegram_id}">
+        <td>
+          <div class="user-cell">
+            <span class="user-name">${u.username ? '@' + u.username : '(no username)'}</span>
+            <span class="user-id">ID: ${u.telegram_id}</span>
+          </div>
+        </td>
+        <td>${shortWallet(u.wallet_address)}</td>
+        <td><span class="badge ${u.wallet_address ? 'verified' : 'unverified'}">${u.wallet_address ? 'Verified' : 'Unverified'}</span></td>
+        <td>${u.referral_count}</td>
+        <td class="balance-cell">${formatNumber(u.balance)} $MYT</td>
+        <td>
+          <div class="action-cell">
+            <input class="amount-input" type="number" min="0" placeholder="0" id="amount-${u.telegram_id}">
+            <button class="action-btn add" onclick="adjustBalance(${u.telegram_id}, 'add')">+ Add</button>
+            <button class="action-btn deduct" onclick="adjustBalance(${u.telegram_id}, 'deduct')">- Deduct</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  async function adjustBalance(telegramId, direction){
+    const input = document.getElementById(`amount-${telegramId}`);
+    const amount = parseInt(input.value, 10);
+    if (isNaN(amount) || amount <= 0) return;
+
+    await adminApi(`/users/${telegramId}/adjust`, {
+      method: 'POST',
+      body: JSON.stringify({ amount, direction }),
+    });
+    await renderTable();
+    const row = document.getElementById(`row-${telegramId}`);
+    if (row){
+      row.classList.add('flash');
+      setTimeout(() => row.classList.remove('flash'), 50);
+    }
+  }
+
+  // ---------- Tasks ----------
+  async function loadTasks(){
+    const res = await adminApi('/tasks');
+    const tasks = await res.json();
+    document.getElementById('taskTableBody').innerHTML = tasks.map((t) => `
+      <tr>
+        <td>${t.type === 'visit_website' ? 'Visit Website' : 'Start Another Bot'}</td>
+        <td>${t.title}</td>
+        <td style="max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${t.link}</td>
+        <td>${t.reward} $MYT</td>
+        <td>${t.active ? 'Active' : 'Inactive'}</td>
+        <td>${t.active ? `<button class="small-btn" onclick="removeTask(${t.id})">Deactivate</button>` : ''}</td>
+      </tr>
+    `).join('');
+  }
+
+  async function createTask(){
+    const type = document.getElementById('taskType').value;
+    const title = document.getElementById('taskTitle').value.trim();
+    const link = document.getElementById('taskLink').value.trim();
+    const reward = parseInt(document.getElementById('taskReward').value, 10);
+    if (!title || !link || !reward) return;
+
+    await adminApi('/tasks', { method: 'POST', body: JSON.stringify({ type, title, link, reward }) });
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskLink').value = '';
+    document.getElementById('taskReward').value = '';
+    loadTasks();
+  }
+
+  async function removeTask(id){
+    await adminApi(`/tasks/${id}`, { method: 'DELETE' });
+    loadTasks();
+  }
+
+  // ---------- Redeem Codes ----------
+  async function loadCodes(){
+    const res = await adminApi('/redeem-codes');
+    const codes = await res.json();
+    document.getElementById('codeTableBody').innerHTML = codes.map((c) => `
+      <tr>
+        <td>${c.code}</td>
+        <td>${c.reward} $MYT</td>
+        <td>${c.use_count}${c.max_uses ? ' / ' + c.max_uses : ' (unlimited)'}</td>
+      </tr>
+    `).join('');
+  }
+
+  async function createRedeemCode(){
+    const code = document.getElementById('codeValue').value.trim();
+    const reward = parseInt(document.getElementById('codeReward').value, 10);
+    const maxUsesRaw = document.getElementById('codeMaxUses').value.trim();
+    if (!code || !reward) return;
+
+    const res = await adminApi('/redeem-codes', {
+      method: 'POST',
+      body: JSON.stringify({ code, reward, maxUses: maxUsesRaw || null }),
+    });
+    if (res.ok){
+      document.getElementById('codeValue').value = '';
+      document.getElementById('codeReward').value = '';
+      document.getElementById('codeMaxUses').value = '';
+      loadCodes();
+    } else {
+      const err = await res.json();
+      alert(err.error || 'Could not create code');
+    }
+  }
+
+  function loadAll(){
+    renderTable();
+    loadTasks();
+    loadCodes();
+  }
+
+  // If there's already a valid admin session (e.g. page refresh), skip the login screen
+  (async () => {
+    const res = await adminApi('/users');
+    if (res.ok){
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadAll();
+    }
+  })();
+</script>
+</body>
+</html>

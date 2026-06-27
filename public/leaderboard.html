@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Makyton — Leaderboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08070b;
+    --surface:#15101d;
+    --surface-2:#1c1527;
+    --purple-deep:#2c1547;
+    --purple:#4a2384;
+    --purple-bright:#7c3aed;
+    --text:#f4f1f8;
+    --text-muted:#948da3;
+    --border:#241a32;
+    --gold:#e3b341;
+    --silver:#c3c3cf;
+    --bronze:#cd8b53;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+  }
+  .app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    position:relative;
+    padding-bottom:90px;
+  }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 20px 8px;
+  }
+  .wordmark{
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:20px;
+    letter-spacing:0.5px;
+  }
+  .wordmark span{ color:var(--purple-bright); }
+  .you-rank{
+    font-size:11.5px;
+    color:var(--text-muted);
+    background:var(--surface-2);
+    padding:5px 11px;
+    border-radius:20px;
+    border:1px solid var(--border);
+  }
+  .you-rank b{ color:var(--purple-bright); }
+
+  /* Podium */
+  .podium-wrap{
+    margin:16px 20px 28px;
+    border-radius:24px;
+    padding:26px 18px 0;
+    background:
+      radial-gradient(120% 140% at 50% 0%, rgba(124,58,237,0.30), transparent 65%),
+      linear-gradient(160deg, var(--purple-deep), #170c28 75%);
+    border:1px solid #2c1c47;
+    overflow:hidden;
+  }
+  .podium{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:10px;
+  }
+  .podium-slot{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .p-pic{
+    width:54px; height:54px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--purple-bright), var(--purple-deep));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:18px;
+    margin-bottom:8px;
+    position:relative;
+  }
+  .podium-slot.first .p-pic{ width:68px; height:68px; font-size:22px; box-shadow:0 0 0 3px var(--gold); }
+  .podium-slot.second .p-pic{ box-shadow:0 0 0 3px var(--silver); }
+  .podium-slot.third .p-pic{ box-shadow:0 0 0 3px var(--bronze); }
+  .medal{
+    position:absolute;
+    bottom:-6px; left:50%;
+    transform:translateX(-50%);
+    width:22px; height:22px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:800;
+    font-family:'Sora', sans-serif;
+    color:#1a1320;
+  }
+  .first .medal{ background:var(--gold); }
+  .second .medal{ background:var(--silver); }
+  .third .medal{ background:var(--bronze); }
+
+  .p-name{ font-size:12.5px; font-weight:600; margin-top:6px; max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .p-score{ font-size:11.5px; color:var(--gold); font-weight:700; margin-top:2px; }
+
+  .bar{
+    width:100%;
+    margin-top:14px;
+    border-radius:14px 14px 0 0;
+    background:linear-gradient(180deg, rgba(124,58,237,0.35), rgba(124,58,237,0.08));
+    border:1px solid #3a2459;
+    border-bottom:none;
+  }
+  .first .bar{ height:64px; }
+  .second .bar{ height:44px; }
+  .third .bar{ height:34px; }
+  .bar-rank{
+    text-align:center;
+    padding-top:8px;
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:15px;
+    color:rgba(244,241,248,0.5);
+  }
+
+  /* Vertical list */
+  .section{ padding:0 20px; }
+  .section-title{
+    font-family:'Sora', sans-serif;
+    font-size:15px;
+    font-weight:700;
+    margin:6px 0 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .section-title .count{
+    font-family:'Inter', sans-serif;
+    font-size:12px;
+    font-weight:500;
+    color:var(--text-muted);
+    background:var(--surface-2);
+    padding:3px 9px;
+    border-radius:20px;
+  }
+
+  .rank-list{ display:flex; flex-direction:column; gap:8px; }
+  .rank-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:11px 14px;
+  }
+  .rank-row.me{
+    border-color:var(--purple-bright);
+    background:linear-gradient(90deg, rgba(124,58,237,0.12), transparent);
+  }
+  .rank-num{
+    width:24px;
+    font-family:'Sora', sans-serif;
+    font-weight:700;
+    font-size:13px;
+    color:var(--text-muted);
+    text-align:center;
+    flex-shrink:0;
+  }
+  .rank-pic{
+    width:36px; height:36px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--purple), var(--purple-deep));
+    flex-shrink:0;
+  }
+  .rank-info{ flex:1; min-width:0; }
+  .rank-name{ font-size:13.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rank-score{
+    font-size:13px;
+    font-weight:700;
+    color:var(--gold);
+    flex-shrink:0;
+  }
+
+  /* Footer nav */
+  .footer-nav{
+    position:fixed;
+    bottom:0; left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:430px;
+    background:rgba(21,16,29,0.92);
+    backdrop-filter:blur(14px);
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-around;
+    padding:12px 0 18px;
+  }
+  .nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    color:var(--text-muted);
+    font-size:11px;
+    font-weight:500;
+  }
+  .nav-item.active{ color:var(--purple-bright); }
+  a.nav-item{ text-decoration:none; cursor:pointer; }
+  .nav-icon{ font-size:19px; }
+
+  .icon{ width:21px; height:21px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; display:block; }
+</style>
+</head>
+<body>
+<svg style="display:none">
+  <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></symbol>
+  <symbol id="icon-trophy" viewBox="0 0 24 24"><path d="M6 4h12v3a6 6 0 0 1-12 0V4z"/><path d="M6 5H3a3 3 0 0 0 3 5"/><path d="M18 5h3a3 3 0 0 1-3 5"/><path d="M9 20h6"/><path d="M12 13v4"/></symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></symbol>
+</svg>
+<div class="app">
+
+  <div class="topbar">
+    <div class="wordmark">MAKY<span>TON</span></div>
+    <div class="you-rank">You're <b id="yourRank">#—</b></div>
+  </div>
+
+  <div class="podium-wrap">
+    <div class="podium" id="podium"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Top 500 <span class="count">$MYT earned</span></div>
+    <div class="rank-list" id="rankList"></div>
+  </div>
+
+  <div class="footer-nav">
+    <a class="nav-item" href="home.html">
+      <div class="nav-icon"><svg class="icon"><use href="#icon-home"></use></svg></div>
+      Home
+    </a>
+    <a class="nav-item active" href="leaderboard.html">
+      <div class="nav-icon"><svg class="icon"><use href="#icon-trophy"></use></svg></div>
+      Leaderboard
+    </a>
+    <a class="nav-item" href="me.html">
+      <div class="nav-icon"><svg class="icon"><use href="#icon-user"></use></svg></div>
+      Me
+    </a>
+  </div>
+
+</div>
+<script>
+  function formatNumber(n){ return n.toLocaleString('en-US'); }
+  function initials(name){ return (name || '?').charAt(0).toUpperCase(); }
+
+  function renderPodium(top3){
+    const order = ['second', 'first', 'third']; // visual order: 2nd, 1st, 3rd
+    const ranks = [2, 1, 3];
+    const podium = document.getElementById('podium');
+    podium.innerHTML = order.map((slot, i) => {
+      const rank = ranks[i];
+      const user = top3[rank - 1];
+      if (!user) return `<div class="podium-slot ${slot}"></div>`;
+      const name = user.username ? '@' + user.username : (user.first_name || 'User');
+      return `
+        <div class="podium-slot ${slot}">
+          <div class="p-pic">${initials(name.replace('@',''))}<div class="medal">${rank}</div></div>
+          <div class="p-name">${name}</div>
+          <div class="p-score">${formatNumber(user.balance)}</div>
+          <div class="bar"><div class="bar-rank">${rank}</div></div>
+        </div>`;
+    }).join('');
+  }
+
+  function renderRankList(rest, myTelegramId){
+    const list = document.getElementById('rankList');
+    list.innerHTML = rest.map((user, i) => {
+      const rank = i + 4; // ranks 4 and up
+      const isMe = String(user.telegram_id) === String(myTelegramId);
+      const name = user.username ? '@' + user.username : (user.first_name || `User ${user.telegram_id}`);
+      return `
+        <div class="rank-row ${isMe ? 'me' : ''}">
+          <div class="rank-num">${rank}</div>
+          <div class="rank-pic"></div>
+          <div class="rank-info"><div class="rank-name">${name}${isMe ? ' (you)' : ''}</div></div>
+          <div class="rank-score">${formatNumber(user.balance)}</div>
+        </div>`;
+    }).join('');
+  }
+
+  async function init(){
+    const meRes = await fetch('/api/me', { credentials: 'include' });
+    if (!meRes.ok){ window.location.href = 'index.html'; return; }
+    const me = await meRes.json();
+
+    const lbRes = await fetch('/api/leaderboard', { credentials: 'include' });
+    const top = await lbRes.json();
+
+    document.getElementById('yourRank').textContent = me.rank ? `#${me.rank}` : '—';
+    renderPodium(top.slice(0, 3));
+
+    // Show ranks 4-10 plus your own row if you're outside the visible top of the list
+    const rest = top.slice(3);
+    const visibleRest = rest.slice(0, 7);
+    const meInVisible = visibleRest.some((u) => String(u.telegram_id) === String(me.telegram_id));
+    if (!meInVisible && me.rank > 3){
+      const myEntry = top.find((u) => String(u.telegram_id) === String(me.telegram_id));
+      if (myEntry) visibleRest.push(myEntry);
+    }
+    renderRankList(visibleRest, me.telegram_id);
+  }
+  init();
+</script>
+</body>
+</html>

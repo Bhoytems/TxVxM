@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Makyton — Me</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08070b;
+    --surface:#15101d;
+    --surface-2:#1c1527;
+    --purple-deep:#2c1547;
+    --purple:#4a2384;
+    --purple-bright:#7c3aed;
+    --text:#f4f1f8;
+    --text-muted:#948da3;
+    --border:#241a32;
+    --gold:#e3b341;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+  }
+  .app{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    position:relative;
+    padding-bottom:90px;
+  }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 20px 8px;
+  }
+  .wordmark{
+    font-family:'Sora', sans-serif;
+    font-weight:800;
+    font-size:20px;
+    letter-spacing:0.5px;
+  }
+  .wordmark span{ color:var(--purple-bright); }
+
+  /* Profile header */
+  .profile-card{
+    margin:18px 20px 22px;
+    border-radius:24px;
+    padding:30px 24px 24px;
+    background:
+      radial-gradient(120% 140% at 50% 0%, rgba(124,58,237,0.30), transparent 65%),
+      linear-gradient(160deg, var(--purple-deep), #170c28 75%);
+    border:1px solid #2c1c47;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .profile-pic{
+    width:84px; height:84px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--purple-bright), var(--purple-deep));
+    border:3px solid #1c1527;
+    box-shadow:0 0 0 3px var(--purple-bright);
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Sora', sans-serif;
+    font-size:30px;
+    font-weight:800;
+  }
+  .profile-username{
+    font-family:'Sora', sans-serif;
+    font-size:18px;
+    font-weight:700;
+  }
+  .profile-id{
+    margin-top:6px;
+    font-size:12px;
+    color:var(--text-muted);
+    background:var(--surface-2);
+    padding:4px 12px;
+    border-radius:20px;
+  }
+
+  .stats-row{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+    width:100%;
+  }
+  .stat{
+    flex:1;
+    background:rgba(0,0,0,0.25);
+    border-radius:14px;
+    padding:12px;
+    border:1px solid #2c1c47;
+  }
+  .stat-value{
+    font-family:'Sora', sans-serif;
+    font-size:18px;
+    font-weight:800;
+  }
+  .stat-label{
+    font-size:11px;
+    color:var(--text-muted);
+    margin-top:2px;
+  }
+
+  /* Redeem code */
+  .section{ padding:0 20px; }
+  .section-title{
+    font-family:'Sora', sans-serif;
+    font-size:15px;
+    font-weight:700;
+    margin:6px 0 12px;
+  }
+  .redeem-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+  }
+  .redeem-card p{
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin-bottom:14px;
+    line-height:1.5;
+  }
+  .redeem-input-row{
+    display:flex;
+    gap:8px;
+  }
+  .redeem-input{
+    flex:1;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:13px 14px;
+    color:var(--text);
+    font-size:14px;
+    font-family:'Inter', sans-serif;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .redeem-input::placeholder{ color:var(--text-muted); text-transform:none; letter-spacing:normal; }
+  .redeem-btn{
+    background:var(--purple-bright);
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:0 20px;
+    font-size:13.5px;
+    font-weight:700;
+    font-family:'Inter', sans-serif;
+    cursor:pointer;
+  }
+
+  /* Misc list */
+  .list-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:18px;
+    margin-top:14px;
+    overflow:hidden;
+  }
+  .list-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px 16px;
+    border-bottom:1px solid var(--border);
+    font-size:13.5px;
+  }
+  .list-row:last-child{ border-bottom:none; }
+  .list-row .arrow{ color:var(--text-muted); }
+
+  /* Footer nav */
+  .footer-nav{
+    position:fixed;
+    bottom:0; left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:430px;
+    background:rgba(21,16,29,0.92);
+    backdrop-filter:blur(14px);
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-around;
+    padding:12px 0 18px;
+  }
+  .nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    color:var(--text-muted);
+    font-size:11px;
+    font-weight:500;
+  }
+  .nav-item.active{ color:var(--purple-bright); }
+  a.nav-item{ text-decoration:none; cursor:pointer; }
+  .nav-icon{ font-size:19px; }
+
+  .icon{ width:21px; height:21px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; display:block; }
+  .list-row .left{ display:flex; align-items:center; gap:10px; color:var(--text-muted); }
+  .list-row .left .icon{ color:var(--purple-bright); }
+  .list-row .arrow{ display:flex; align-items:center; gap:5px; color:var(--text); }
+  .list-row .icon{ width:15px; height:15px; stroke-width:2.2; }
+  .list-row.clickable{ cursor:pointer; }
+
+  /* Floating modal */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(3px);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:100;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-card{
+    width:100%;
+    max-width:430px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-bottom:none;
+    border-radius:22px 22px 0 0;
+    padding:22px 20px 30px;
+    animation:slide-up 0.25s ease;
+  }
+  @keyframes slide-up{
+    from{ transform:translateY(100%); }
+    to{ transform:translateY(0); }
+  }
+  .modal-handle{
+    width:36px; height:4px;
+    border-radius:4px;
+    background:var(--border);
+    margin:0 auto 16px;
+  }
+  .modal-title{
+    font-family:'Sora', sans-serif;
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .modal-desc{
+    font-size:12.5px;
+    color:var(--text-muted);
+    line-height:1.5;
+    margin-bottom:16px;
+  }
+  .modal-input{
+    width:100%;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:13px 14px;
+    color:var(--text);
+    font-size:13.5px;
+    font-family:'Inter', sans-serif;
+    margin-bottom:8px;
+  }
+  .modal-error{
+    font-size:11.5px;
+    color:#f06868;
+    min-height:16px;
+    margin-bottom:8px;
+  }
+  .modal-btn-row{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+  }
+  .modal-btn{
+    flex:1;
+    border:none;
+    border-radius:12px;
+    padding:13px;
+    font-size:13.5px;
+    font-weight:700;
+    font-family:'Inter', sans-serif;
+    cursor:pointer;
+  }
+  .modal-btn.cancel{
+    background:var(--surface-2);
+    color:var(--text-muted);
+  }
+  .modal-btn.save{
+    background:var(--purple-bright);
+    color:#fff;
+  }
+  .modal-link-box{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:13px 14px;
+    font-size:12.5px;
+    color:var(--text);
+    word-break:break-all;
+    margin-bottom:14px;
+  }
+  .modal-copy-feedback{
+    font-size:11.5px;
+    color:var(--purple-bright);
+    text-align:center;
+    height:14px;
+    margin-top:8px;
+  }
+</style>
+</head>
+<body>
+<svg style="display:none">
+  <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></symbol>
+  <symbol id="icon-trophy" viewBox="0 0 24 24"><path d="M6 4h12v3a6 6 0 0 1-12 0V4z"/><path d="M6 5H3a3 3 0 0 0 3 5"/><path d="M18 5h3a3 3 0 0 1-3 5"/><path d="M9 20h6"/><path d="M12 13v4"/></symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></symbol>
+  <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="icon-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 9h18"/><circle cx="17" cy="13.5" r="1"/></symbol>
+  <symbol id="icon-link" viewBox="0 0 24 24"><path d="M9 7H7a4 4 0 0 0 0 8h2"/><path d="M15 7h2a4 4 0 0 1 0 8h-2"/><path d="M8 11h8"/></symbol>
+  <symbol id="icon-support" viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M20 19a4 4 0 0 1-4 3h-2"/></symbol>
+</svg>
+<div class="app">
+
+  <div class="topbar">
+    <div class="wordmark">MAKY<span>TON</span></div>
+  </div>
+
+  <div class="profile-card">
+    <div class="profile-pic" id="profilePic">?</div>
+    <div class="profile-username" id="profileUsername">@—</div>
+    <div class="profile-id" id="profileId">Telegram ID: —</div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-value" id="statBalance">0</div>
+        <div class="stat-label">$MYT Balance</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="statRank">#—</div>
+        <div class="stat-label">Rank</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Redeem Code</div>
+    <div class="redeem-card">
+      <p>Have a code from Makyton's team or a promo? Enter it below to claim your $MYT.</p>
+      <div class="redeem-input-row">
+        <input class="redeem-input" type="text" id="redeemInput" placeholder="Enter code">
+        <button class="redeem-btn" onclick="redeemCode()">Redeem</button>
+      </div>
+      <div class="modal-error" id="redeemMessage" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="list-card">
+      <div class="list-row clickable" id="walletRow" onclick="openWalletModal()">
+        <span class="left"><svg class="icon"><use href="#icon-wallet"></use></svg>Wallet Address</span>
+        <span class="arrow" id="walletArrow">Add <svg class="icon"><use href="#icon-chevron"></use></svg></span>
+      </div>
+      <div class="list-row clickable" onclick="openReferralModal()">
+        <span class="left"><svg class="icon"><use href="#icon-link"></use></svg>Referral Link</span>
+        <span class="arrow"><svg class="icon"><use href="#icon-chevron"></use></svg></span>
+      </div>
+      <div class="list-row"><span class="left"><svg class="icon"><use href="#icon-support"></use></svg>Support</span><span class="arrow"><svg class="icon"><use href="#icon-chevron"></use></svg></span></div>
+    </div>
+  </div>
+
+  <div class="footer-nav">
+    <a class="nav-item" href="home.html">
+      <div class="nav-icon"><svg class="icon"><use href="#icon-home"></use></svg></div>
+      Home
+    </a>
+    <a class="nav-item" href="leaderboard.html">
+      <div class="nav-icon"><svg class="icon"><use href="#icon-trophy"></use></svg></div>
+      Leaderboard
+    </a>
+    <a class="nav-item active" href="me.html">
+      <div class="nav-icon"><svg class="icon"><use href="#icon-user"></use></svg></div>
+      Me
+    </a>
+  </div>
+
+</div>
+<!-- Wallet modal -->
+<div class="modal-overlay" id="walletModal">
+  <div class="modal-card">
+    <div class="modal-handle"></div>
+    <div class="modal-title">MATIC Wallet Address</div>
+    <div class="modal-desc">Add or update the wallet address tied to your Makyton account. You can change it anytime.</div>
+    <input class="modal-input" id="walletInput" type="text" placeholder="0x..." autocomplete="off">
+    <div class="modal-error" id="walletError"></div>
+    <div class="modal-btn-row">
+      <button class="modal-btn cancel" onclick="closeWalletModal()">Cancel</button>
+      <button class="modal-btn save" onclick="saveWallet()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Referral modal -->
+<div class="modal-overlay" id="referralModal">
+  <div class="modal-card">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Your Referral Link</div>
+    <div class="modal-desc">Share this link — when someone joins and gets verified, you earn 12 $MYT.</div>
+    <div class="modal-link-box" id="referralLinkText">https://t.me/MakytonBot?start=ref_6293841057</div>
+    <div class="modal-btn-row">
+      <button class="modal-btn cancel" onclick="closeReferralModal()">Close</button>
+      <button class="modal-btn save" onclick="copyReferralLink()">Copy Link</button>
+    </div>
+    <div class="modal-copy-feedback" id="copyFeedback"></div>
+  </div>
+</div>
+
+<script>
+  let me = null;
+
+  async function api(path, options = {}){
+    const res = await fetch('/api' + path, {
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      ...options,
+    });
+    if (res.status === 401){ window.location.href = 'index.html'; throw new Error('not logged in'); }
+    return res;
+  }
+
+  function formatNumber(n){ return n.toLocaleString('en-US'); }
+
+  function renderProfile(){
+    const name = me.username ? '@' + me.username : (me.first_name || 'Makytian');
+    document.getElementById('profileUsername').textContent = name;
+    document.getElementById('profileId').textContent = `Telegram ID: ${me.telegram_id}`;
+    document.getElementById('statBalance').textContent = formatNumber(me.balance);
+    document.getElementById('statRank').textContent = me.rank ? `#${me.rank}` : '#—';
+
+    const picEl = document.getElementById('profilePic');
+    if (me.photo_url){
+      picEl.innerHTML = `<img src="${me.photo_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="">`;
+    } else {
+      picEl.textContent = (me.first_name || me.username || '?').charAt(0).toUpperCase();
+    }
+
+    renderWalletRow();
+  }
+
+  function renderWalletRow(){
+    const arrow = document.getElementById('walletArrow');
+    if (me.wallet_address){
+      const short = me.wallet_address.slice(0,6) + '...' + me.wallet_address.slice(-4);
+      arrow.innerHTML = short + ' <svg class="icon"><use href="#icon-chevron"></use></svg>';
+    } else {
+      arrow.innerHTML = 'Add <svg class="icon"><use href="#icon-chevron"></use></svg>';
+    }
+  }
+
+  function openWalletModal(){
+    document.getElementById('walletInput').value = me.wallet_address || '';
+    document.getElementById('walletError').textContent = '';
+    document.getElementById('walletModal').classList.add('open');
+  }
+  function closeWalletModal(){
+    document.getElementById('walletModal').classList.remove('open');
+  }
+  async function saveWallet(){
+    const val = document.getElementById('walletInput').value.trim();
+    const errorEl = document.getElementById('walletError');
+    if (!/^0x[a-fA-F0-9]{40}$/.test(val)){
+      errorEl.textContent = 'Enter a valid MATIC wallet address (0x + 40 characters).';
+      return;
+    }
+    const res = await api('/wallet', { method: 'POST', body: JSON.stringify({ wallet: val }) });
+    if (!res.ok){
+      const err = await res.json();
+      errorEl.textContent = err.error || 'Could not save wallet.';
+      return;
+    }
+    me.wallet_address = val;
+    renderWalletRow();
+    closeWalletModal();
+  }
+
+  let referralLink = '';
+  async function openReferralModal(){
+    document.getElementById('copyFeedback').textContent = '';
+    if (!referralLink){
+      const res = await api('/referral');
+      const data = await res.json();
+      referralLink = data.link;
+      document.getElementById('referralLinkText').textContent = referralLink;
+    }
+    document.getElementById('referralModal').classList.add('open');
+  }
+  function closeReferralModal(){
+    document.getElementById('referralModal').classList.remove('open');
+  }
+  function copyReferralLink(){
+    const text = document.getElementById('referralLinkText').textContent;
+    const feedback = document.getElementById('copyFeedback');
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(() => {
+        feedback.textContent = 'Copied!';
+      }).catch(() => {
+        feedback.textContent = 'Could not copy — long-press to copy manually.';
+      });
+    } else {
+      feedback.textContent = 'Long-press the link above to copy.';
+    }
+  }
+
+  async function redeemCode(){
+    const input = document.getElementById('redeemInput');
+    const msgEl = document.getElementById('redeemMessage');
+    const code = input.value.trim();
+    if (!code){ return; }
+
+    const res = await api('/redeem', { method: 'POST', body: JSON.stringify({ code }) });
+    const data = await res.json();
+
+    if (!res.ok){
+      msgEl.style.color = 'var(--red)';
+      msgEl.textContent = data.message || 'Could not redeem this code.';
+      return;
+    }
+
+    msgEl.style.color = 'var(--purple-bright)';
+    msgEl.textContent = `Success! +${data.reward} $MYT added.`;
+    input.value = '';
+    me.balance = data.balance;
+    document.getElementById('statBalance').textContent = formatNumber(me.balance);
+  }
+
+  // close modal when tapping the dark overlay (outside the card)
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+  });
+
+  async function init(){
+    const res = await api('/me');
+    me = await res.json();
+    renderProfile();
+  }
+  init();
+</script>
+</body>
+</html>
+
