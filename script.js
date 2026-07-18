@@ -420,7 +420,7 @@ const App = {
   
   // --- ADD THIS BLOCK ---
   // Send activation message to Telegram
-  const activationMsg = `🤖 *Trend Pulse Bot is ONLINE!*\n\n` +
+  const activationMsg = `🤖 *MAGNIFICO AI Bot is ONLINE!*\n\n` +
                         `📊 Monitoring: GBPUSD, XAUUSD, BTCUSD\n` +
                         `⏱ Checking every 5 minutes (WAT)\n` +
                         `✅ Signals will be sent here when detected.`;
