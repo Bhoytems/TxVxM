@@ -7,7 +7,7 @@ const CONFIG = {
 
   // ---- Telegram bot (required) ----
   botToken: '8616558500:AAE3Q_TMTCVrxYGk-d9pQSb2ZRwt8_ZLbrM',   // ← replace with your bot token
-  chatId: '-1003739885976',       // ← replace with your chat ID
+  chatId: '-8616558500',       // ← replace with your chat ID
 
   // ---- API key for Twelve Data ----
   twelveDataKey: '2fb822c09c1c42e19c07e94090f18b42',
@@ -425,6 +425,23 @@ const App = {
       await this.runAnalysis(true);
     });
   },
+  async start() {
+  UI.renderAssets();
+  
+  // --- ADD THIS BLOCK ---
+  // Send activation message to Telegram
+  const activationMsg = `🤖 *Magnifico AI Bot is ONLINE!*\n\n` +
+                        `📊 Monitoring: GBPUSD, XAUUSD, BTCUSD\n` +
+                        `⏱ Checking every 5 minutes (WAT)\n` +
+                        `✅ Signals will be sent here when detected.`;
+  await Bot.sendMessage(activationMsg);
+  // --- END OF ADDED BLOCK ---
+
+  await this.runAnalysis();
+  this.startAutoRefresh();
+  this.startCountdown();
+  // ...
+}
 
   startCountdown() {
     if (this.state.countdownTimer) clearInterval(this.state.countdownTimer);
