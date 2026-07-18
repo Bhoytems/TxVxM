@@ -7,7 +7,7 @@ const CONFIG = {
 
   // ---- Telegram bot (required) ----
   botToken: '8616558500:AAE3Q_TMTCVrxYGk-d9pQSb2ZRwt8_ZLbrM',   // ← replace with your bot token
-  chatId: '-8616558500',       // ← replace with your chat ID
+  chatId: '-1003739885976',       // ← replace with your chat ID
 
   // ---- API key for Twelve Data ----
   twelveDataKey: '2fb822c09c1c42e19c07e94090f18b42',
