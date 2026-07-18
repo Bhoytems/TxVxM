@@ -7,7 +7,7 @@ const CONFIG = {
 
   // ---- Telegram bot (required) ----
   botToken: '8616558500:AAE3Q_TMTCVrxYGk-d9pQSb2ZRwt8_ZLbrM',   // ← replace with your bot token
-  chatId: '-8616558500',       // ← replace with your chat ID
+  chatId: '6274537011',       // ← replace with your chat ID
 
   // ---- API key for Twelve Data ----
   twelveDataKey: '2fb822c09c1c42e19c07e94090f18b42',
@@ -179,9 +179,42 @@ const DataFetcher = {
 const Bot = {
 
   async sendMessage(text, parseMode = 'Markdown') {
-    if (!CONFIG.botToken || !CONFIG.chatId) {
-      console.warn('Bot not configured');
+    // Check if bot is configured and chatIds exist
+    if (!CONFIG.botToken || !CONFIG.chatIds || CONFIG.chatIds.length === 0) {
+      console.warn('Bot not configured or no user IDs provided');
       return false;
+    }
+
+    let allSuccess = true;
+    for (const userId of CONFIG.chatIds) {
+      const url = `https://api.telegram.org/bot${CONFIG.botToken}/sendMessage`;
+      try {
+        const resp = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: userId,
+            text: text,
+            parse_mode: parseMode,
+            disable_web_page_preview: true,
+          }),
+        });
+        const json = await resp.json();
+        if (!json.ok) {
+          console.error(`Failed to send to user ${userId}:`, json.description);
+          allSuccess = false;
+        } else {
+          console.log(`✅ Signal sent to user ${userId}`);
+        }
+      } catch (e) {
+        console.error(`Error sending to user ${userId}:`, e);
+        allSuccess = false;
+      }
+    }
+    return allSuccess;
+  },
+
+};
     }
     const url = `https://api.telegram.org/bot${CONFIG.botToken}/sendMessage`;
     try {
