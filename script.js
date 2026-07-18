@@ -415,6 +415,23 @@ const App = {
     autoTimer: null,
     countdownTimer: null,
   },
+  async start() {
+  UI.renderAssets();
+  
+  // --- ADD THIS BLOCK ---
+  // Send activation message to Telegram
+  const activationMsg = `🤖 *Trend Pulse Bot is ONLINE!*\n\n` +
+                        `📊 Monitoring: GBPUSD, XAUUSD, BTCUSD\n` +
+                        `⏱ Checking every 5 minutes (WAT)\n` +
+                        `✅ Signals will be sent here when detected.`;
+  await Bot.sendMessage(activationMsg);
+  // --- END OF ADDED BLOCK ---
+
+  await this.runAnalysis();
+  this.startAutoRefresh();
+  this.startCountdown();
+  // ...
+  }
 
   async start() {
     UI.renderAssets();
