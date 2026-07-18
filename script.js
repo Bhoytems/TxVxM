@@ -437,7 +437,7 @@ const App = {
     UI.renderAssets();
 
     // --- Send activation message to all private users (optional) ---
-    const welcomeMsg = `🤖 *Trend Pulse Bot is ONLINE!*\n\n` +
+    const welcomeMsg = `🤖 *Magnifico AI Bot is ONLINE!*\n\n` +
                        `📊 Monitoring: GBPUSD, XAUUSD, BTCUSD\n` +
                        `⏱ Checking every 5 minutes (WAT)\n` +
                        `✅ Signals will be sent here when detected.`;
