@@ -5,11 +5,17 @@ const CONFIG = {
   // ---- passcodes (add more codes here) ----
   validPasscodes: ['022005'],
 
-  // ---- Telegram bot (required) ----
+  // ---- Telegram bot token (required) ----
   botToken: '8616558500:AAE3Q_TMTCVrxYGk-d9pQSb2ZRwt8_ZLbrM',   // ← replace with your bot token
-  chatId: '6274537011',       // ← replace with your chat ID
 
-  // ---- API key for Twelve Data ----
+  // ---- List of private user IDs (only numeric IDs) ----
+  chatIds: [
+    '6274537011',   // User 1
+    '987654321',   // User 2
+    // add as many as you like
+  ],
+
+  // ---- API key for Twelve Data (free tier) ----
   twelveDataKey: '2fb822c09c1c42e19c07e94090f18b42',
 
   // ---- assets to monitor (only these 3) ----
@@ -174,7 +180,7 @@ const DataFetcher = {
 };
 
 // ============================================================
-//  TELEGRAM BOT
+//  TELEGRAM BOT (sends to multiple private users)
 // ============================================================
 const Bot = {
 
@@ -212,28 +218,6 @@ const Bot = {
       }
     }
     return allSuccess;
-  },
-
-};
-    }
-    const url = `https://api.telegram.org/bot${CONFIG.botToken}/sendMessage`;
-    try {
-      const resp = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: CONFIG.chatId,
-          text: text,
-          parse_mode: parseMode,
-          disable_web_page_preview: true,
-        }),
-      });
-      const json = await resp.json();
-      return json.ok === true;
-    } catch (e) {
-      console.error('Bot send error:', e);
-      return false;
-    }
   },
 
   formatSignal(assetLabel, signal, price, change, confidence, rsi, emaInfo, expiryTime) {
@@ -451,6 +435,14 @@ const App = {
 
   async start() {
     UI.renderAssets();
+
+    // --- Send activation message to all private users (optional) ---
+    const welcomeMsg = `🤖 *Trend Pulse Bot is ONLINE!*\n\n` +
+                       `📊 Monitoring: GBPUSD, XAUUSD, BTCUSD\n` +
+                       `⏱ Checking every 5 minutes (WAT)\n` +
+                       `✅ Signals will be sent here when detected.`;
+    await Bot.sendMessage(welcomeMsg);
+
     await this.runAnalysis();
     this.startAutoRefresh();
     this.startCountdown();
@@ -458,23 +450,6 @@ const App = {
       await this.runAnalysis(true);
     });
   },
-  async start() {
-  UI.renderAssets();
-  
-  // --- ADD THIS BLOCK ---
-  // Send activation message to Telegram
-  const activationMsg = `🤖 *Magnifico AI Bot is ONLINE!*\n\n` +
-                        `📊 Monitoring: GBPUSD, XAUUSD, BTCUSD\n` +
-                        `⏱ Checking every 5 minutes (WAT)\n` +
-                        `✅ Signals will be sent here when detected.`;
-  await Bot.sendMessage(activationMsg);
-  // --- END OF ADDED BLOCK ---
-
-  await this.runAnalysis();
-  this.startAutoRefresh();
-  this.startCountdown();
-  // ...
-}
 
   startCountdown() {
     if (this.state.countdownTimer) clearInterval(this.state.countdownTimer);
@@ -652,9 +627,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Check bot configuration
   if (!CONFIG.botToken || CONFIG.botToken === 'YOUR_BOT_TOKEN_HERE') {
     UI.updateStatus('offline');
-    console.warn('⚠️ Bot not configured — set botToken and chatId in CONFIG');
+    console.warn('⚠️ Bot not configured — set botToken and chatIds in CONFIG');
   } else {
-    UI.updateStatus('offline');
+    UI.updateStatus('offline'); // will go online after passcode
   }
 
   Passcode.init();
