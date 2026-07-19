@@ -440,7 +440,8 @@ const App = {
     const welcomeMsg = `🤖 *Magnifico AI Bot is ONLINE!*\n\n` +
                        `📊 Monitoring: GBPUSD, XAUUSD, BTCUSD\n` +
                        `⏱ Checking every 5 minutes (WAT)\n` +
-                       `✅ Signals will be sent here when detected.`;
+                       `✅ Signals will be sent here when detected.` +
+                       `Do not close the app to keep it active`
     await Bot.sendMessage(welcomeMsg);
 
     await this.runAnalysis();
