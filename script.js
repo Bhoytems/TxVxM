@@ -6,11 +6,11 @@ const CONFIG = {
   validPasscodes: ['022005'],
 
   // ---- Telegram bot token (required) ----
-  botToken: 'YOUR_BOT_TOKEN_HERE',   // ← replace with your bot token
+  botToken: '8616558500:AAE3Q_TMTCVrxYGk-d9pQSb2ZRwt8_ZLbrM',   // ← replace with your bot token
 
   // ---- List of private user IDs (only numeric IDs) ----
   chatIds: [
-    '123456789',   // User 1
+    '6274537011',   // User 1
     '987654321',   // User 2
     // add as many as you like
   ],
@@ -460,7 +460,7 @@ const App = {
   async start() {
     UI.renderAssets();
 
-    const welcomeMsg = `🤖 *Trend Pulse Bot is ONLINE!*\n\n` +
+    const welcomeMsg = `🤖 *Magnifico AI Bot is ONLINE!*\n\n` +
                        `📊 Binary OTC signals · multi-timeframe EMA strategy\n` +
                        `✅ Press Analyse Now to scan your selected assets.`;
     await Bot.sendMessage(welcomeMsg);
