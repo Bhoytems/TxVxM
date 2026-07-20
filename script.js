@@ -6,14 +6,14 @@ const CONFIG = {
   validPasscodes: ['022005'],
 
   // ---- Telegram bot token (required) ----
-  botToken: 'YOUR_BOT_TOKEN_HERE',   // ← replace with your bot token
+  botToken: '8616558500:AAE3Q_TMTCVrxYGk-d9pQSb2ZRwt8_ZLbrM',   // ← replace with your bot token
 
   // ---- Telegram bot username, no @ (used for the "Back to Chat" link) ----
-  botUsername: 'YOUR_BOT_USERNAME',
+  botUsername: 'https://t.me/Magnificoai_bot',
 
   // ---- List of private user IDs (only numeric IDs) ----
   chatIds: [
-    '123456789',   // User 1
+    '6274537011',   // User 1
     '987654321',   // User 2
     // add as many as you like
   ],
