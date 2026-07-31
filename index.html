@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="theme-color" content="#050507">
+<title>Trend Pulse — Reversal Signal Bot</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ PASSCODE GATE ============ -->
+<div id="gate" class="gate">
+  <div class="gate-card">
+    <div class="gate-mark">◆</div>
+    <h1>TREND PULSE</h1>
+    <p class="gate-sub">Enter passcode to continue</p>
+    <input type="password" id="passcodeInput" inputmode="numeric" maxlength="12" autocomplete="off" autofocus placeholder="••••••">
+    <button id="gateBtn">UNLOCK</button>
+    <p id="gateError" class="gate-error"></p>
+  </div>
+</div>
+
+<!-- ============ MAIN APP ============ -->
+<div id="app" class="app hidden">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">◆</span>
+      <div>
+        <div class="brand-name">TREND PULSE</div>
+        <div class="brand-sub">1-Min Reversal Signal Bot</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="clock" id="watClock">--:--:-- WAT</div>
+      <div class="status-chip">
+        <span id="statusDot" class="status-dot offline"></span>
+        <span id="statusLabel">OFFLINE</span>
+      </div>
+      <button id="engineBtn" class="btn btn-start">START</button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- Asset cards -->
+    <section class="asset-grid" id="assetGrid"></section>
+
+    <!-- Activity feed -->
+    <section class="panel feed-panel">
+      <div class="panel-head">
+        <h2>Live Activity</h2>
+        <button id="clearLogBtn" class="link-btn">Clear</button>
+      </div>
+      <div id="activityFeed" class="activity-feed">
+        <div class="feed-empty">No activity yet — press START or Analyse Now on an asset.</div>
+      </div>
+    </section>
+
+    <!-- Config -->
+    <section class="panel config-panel">
+      <button id="configToggle" class="panel-head collapsible">
+        <h2>⚙ Configuration</h2>
+        <span class="chevron" id="configChevron">▾</span>
+      </button>
+      <div id="configBody" class="config-body">
+
+        <div class="field-group">
+          <label>Twelve Data API Key</label>
+          <input type="password" id="tdApiKey" placeholder="Your Twelve Data API key">
+          <span class="field-hint">Free tier: ~8 requests/min, 800/day — keep the poll interval sane.</span>
+        </div>
+
+        <div class="field-group">
+          <label>Telegram Bot Token</label>
+          <input type="password" id="tgBotToken" placeholder="From @BotFather">
+        </div>
+
+        <div class="field-group">
+          <label>Poll Interval (seconds)</label>
+          <input type="number" id="pollInterval" min="30" value="65">
+        </div>
+
+        <div class="field-group">
+          <label>Telegram Channels</label>
+          <div class="channel-add">
+            <input type="text" id="channelIdInput" placeholder="Channel ID (e.g. -1001234567890)">
+            <input type="text" id="channelLabelInput" placeholder="Label (optional)">
+            <button id="addChannelBtn" class="btn btn-small">Add</button>
+          </div>
+          <ul id="channelList" class="channel-list"></ul>
+        </div>
+
+        <button id="saveConfigBtn" class="btn btn-primary wide">Save Configuration</button>
+        <div id="saveStatus" class="save-status"></div>
+
+        <div class="commands-hint">
+          <strong>Telegram commands</strong> (lowercase, sent from a configured channel/chat):<br>
+          <code>/gbpusd</code> · <code>/xauusd</code> · <code>/btc</code> — instant 1-min signal or current bias.
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
