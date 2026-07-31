@@ -195,7 +195,7 @@ function formatSignalMessage(id, assetLabel, direction, confidence) {
 }
 function formatResultMessage(id, assetLabel, direction, result, entry, exit) {
   const emoji = { WIN: '✅', LOSS: '❌', TIE: '➖' }[result] || '';
-  return `<b>Result ${emoji}</b>\nSignal ID: <code>${id}</code>\nAsset: ${assetLabel} (${direction})\nEntry: ${entry}\nExit: ${exit}\nOutcome: <b>${result}</b>`;
+  return `<b>Result ${emoji}</b>\nSignal ID: <code>${id}</code>\nAsset: ${assetLabel} (${direction})\nOutcome: <b>${result}</b>`;
 }
 function formatBiasMessage(assetLabel, bias, confidence) {
   const emoji = bias === 'BULLISH' ? '📈' : (bias === 'BEARISH' ? '📉' : '➖');
